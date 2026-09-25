@@ -1,0 +1,7 @@
+{
+  "chainSelectorName": "ethereum-testnet-sepolia",
+  "governorAddress": "REPLACE_WITH_TEST_GOVERNOR_ADDRESS",
+  "blockExplorerBaseUrl": "REPLACE_WITH_TRANSACTION_EXPLORER_BASE_URL",
+  "notifyWebhookUrl": "REPLACE_WITH_TEMPORARY_TEST_COLLECTOR_URL"
+}
+

@@ -1,0 +1,9 @@
+*.env
+/evidence/local/private/
+/keeper/config.staging.json
+/keeper/config.production.json
+*.wasm
+*.wasm.br
+*.wasm.br.b64
+secrets.*.yaml
+/keeper/.cre_build_tmp.js

@@ -1,0 +1,9 @@
+{
+  "schedule": "0 */5 * * * *",
+  "evms": [
+    {
+      "chainSelectorName": "ethereum-testnet-sepolia",
+      "contractAddress": "REPLACE_WITH_YOUR_KEEPER_CONSUMER_ADDRESS"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+# Local workflow configuration may contain private test endpoints.
+/gov-alert/config.staging.json
+/gov-alert/config.production.json
+/gov-alert/config.simulation-*.json
+/gov-alert/.cre_build_tmp.js
+
+# Local validation output and compiled workflow artifacts.
+/evidence/local/private/
+*.wasm
+*.wasm.br
+*.wasm.br.b64
+
+# Foundry runtime output.
+/fixture/broadcast/
+/fixture/cache/
+/fixture/out/
+/fixture/lib/
+/fixture/~/
+
+/gov-alert/config.validation-simulation.json
