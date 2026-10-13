@@ -11,6 +11,8 @@ Two Defender workflows ported to [Chainlink CRE](https://docs.chain.link/cre), u
 
 Tested with CRE CLI 1.34.0, `@chainlink/cre-sdk` 1.19.1, Bun 1.4.0, on Sepolia.
 
+Requires Bun 1.4 or later. On Bun 1.3.x, `bun install --frozen-lockfile` fails with `UnknownLockfileVersion`; check with `bun --version`.
+
 ## gov-alert
 
 ```bash

@@ -101,7 +101,7 @@ cre workflow simulate my-workflow --target staging-settings --broadcast
 
 To use your own contract, deploy `contracts/evm/src/KeeperConsumer.sol` to Sepolia using [Remix](https://remix.ethereum.org/) or Foundry. Constructor arguments:
 
-- `forwarder`: CRE KeystoneForwarder address on Sepolia (`0x15fc6ae953e024d975e77382eeec56a9101f9f88`)
+- `forwarder`: the Forwarder your contract trusts. For `cre workflow simulate --broadcast` (step 3), use the Sepolia MockForwarder (`0x15fc6ae953e024d975e77382eeec56a9101f9f88`). For a deployed workflow, use the production KeystoneForwarder on Sepolia (`0xF8344CFd5c43616a4366C34E3EEE75af79a74482`); check the [Forwarder Directory](https://docs.chain.link/cre/guides/workflow/using-evm-client/forwarder-directory-ts) for other networks. Deploy a separate contract for each, and never point a deployed Receiver at the MockForwarder.
 - `_interval`: Seconds between allowed executions (e.g., `300` for 5 minutes)
 
 Then update the `contractAddress` in `my-workflow/config.staging.json` with your deployed address.
