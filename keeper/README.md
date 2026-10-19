@@ -1,5 +1,7 @@
 # Keeper Bot — CRE Starter Template (TypeScript)
 
+Adapted from Chainlink's [`keeper-bot` starter template](https://github.com/smartcontractkit/cre-templates), MIT-licensed; see [`LICENSE`](LICENSE).
+
 Cron-based smart contract maintenance — read state, check condition, execute if needed.
 
 **⚠️ DISCLAIMER**
@@ -48,7 +50,7 @@ This template demonstrates the universal **cron -> read -> check -> write** patt
 
 ## Components
 
-### CRE Workflow (`my-workflow/`)
+### CRE Workflow (`keeper/`)
 
 The TypeScript workflow runs off-chain inside CRE DON:
 
@@ -67,73 +69,54 @@ A simple Solidity contract extending `ReceiverTemplate`:
 
 ## Getting Started
 
-A demo `KeeperConsumer` contract is pre-deployed on Sepolia — this template works out of the box.
+You need your own `KeeperConsumer` on Sepolia before the workflow can run: `config.example.json` ships with a placeholder address.
 
 ### Prerequisites
 
-- [Bun](https://bun.sh/) runtime installed
+- [Bun](https://bun.sh/) 1.4 or later
 - [CRE CLI](https://docs.chain.link/cre) installed
 
 ### 1. Install Dependencies
 
 ```bash
-cd contracts && bun install && cd ..
-cd my-workflow && bun install && cd ..
+(cd contracts && bun install --frozen-lockfile)
+(cd keeper && bun install --frozen-lockfile)
 ```
 
 ### 2. Run Tests
 
 ```bash
-cd my-workflow && bun test
+(cd keeper && bun test)
 ```
 
-### 3. Simulate
+### 3. Deploy the Consumer Contract
+
+Deploy `contracts/evm/src/KeeperConsumer.sol` to Sepolia using [Remix](https://remix.ethereum.org/) or Foundry. Constructor arguments:
+
+- `forwarder`: the Forwarder your contract trusts. For `cre workflow simulate --broadcast` (step 4), use the Sepolia MockForwarder (`0x15fc6ae953e024d975e77382eeec56a9101f9f88`). For a deployed workflow, use the production KeystoneForwarder on Sepolia (`0xF8344CFd5c43616a4366C34E3EEE75af79a74482`); check the [Forwarder Directory](https://docs.chain.link/cre/guides/workflow/using-evm-client/forwarder-directory-ts) for other networks. Deploy a separate contract for each, and never point a deployed Receiver at the MockForwarder.
+- `_interval`: Seconds between allowed executions (e.g., `300` for 5 minutes)
+
+Then create your local config and set `contractAddress` to the deployed address:
+
+```bash
+cp keeper/config.example.json keeper/config.staging.json
+```
+
+### 4. Simulate
 
 ```bash
 # Dry run (no broadcast)
-cre workflow simulate my-workflow --target staging-settings
+cre workflow simulate ./keeper --target staging-settings
 
 # With actual on-chain transaction
-cre workflow simulate my-workflow --target staging-settings --broadcast
+cre workflow simulate ./keeper --target staging-settings --broadcast
 ```
-
-### 4. Deploy Your Own Contract (Optional)
-
-To use your own contract, deploy `contracts/evm/src/KeeperConsumer.sol` to Sepolia using [Remix](https://remix.ethereum.org/) or Foundry. Constructor arguments:
-
-- `forwarder`: the Forwarder your contract trusts. For `cre workflow simulate --broadcast` (step 3), use the Sepolia MockForwarder (`0x15fc6ae953e024d975e77382eeec56a9101f9f88`). For a deployed workflow, use the production KeystoneForwarder on Sepolia (`0xF8344CFd5c43616a4366C34E3EEE75af79a74482`); check the [Forwarder Directory](https://docs.chain.link/cre/guides/workflow/using-evm-client/forwarder-directory-ts) for other networks. Deploy a separate contract for each, and never point a deployed Receiver at the MockForwarder.
-- `_interval`: Seconds between allowed executions (e.g., `300` for 5 minutes)
-
-Then update the `contractAddress` in `my-workflow/config.staging.json` with your deployed address.
 
 ## Customization
 
 - **Change the schedule**: Edit `schedule` in `config.staging.json` (cron syntax)
 - **Change the condition**: Replace `needsUpkeep()` with any view function that returns whether to execute
 - **Change the action**: Modify the `_processReport()` logic in `KeeperConsumer.sol` to perform any state mutation
-
-## Migration Guides
-
-### Coming from Gelato?
-
-This template replaces Gelato's `Web3Function.onRun()` with a CRE cron trigger. Gelato shut down Web3 Functions in March 2026 — this is the direct migration path.
-
-| Gelato | CRE |
-|--------|-----|
-| `Web3Function.onRun()` | CRE cron callback (`onCronTrigger`) |
-| `multiChainProvider` | `EVMClient` |
-| `userArgs` | `config.json` |
-| `Storage.get/set()` | On-chain state or Key-Value Store template |
-
-### Coming from Chainlink Automation?
-
-This template replaces the `checkUpkeep() + performUpkeep()` pattern with off-chain logic + `onReport()`. No more gas overhead for `checkUpkeep` — the condition check runs off-chain in CRE DON.
-
-| Chainlink Automation | CRE |
-|---------------------|-----|
-| `checkUpkeep()` on-chain | `needsUpkeep()` read via `EVMClient` (off-chain) |
-| `performUpkeep()` | `onReport()` via KeystoneForwarder |
-| LINK funding | No per-call LINK costs |
 
 ## Security
 
@@ -143,4 +126,4 @@ This template replaces the `checkUpkeep() + performUpkeep()` pattern with off-ch
 
 ## License
 
-MIT
+MIT, Copyright (c) 2025 SmartContract. See [`LICENSE`](LICENSE). The `@chainlink/cre-sdk` dependency is licensed separately under BUSL-1.1.
