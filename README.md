@@ -46,3 +46,9 @@ cre workflow build ./keeper
 ```
 
 Local configuration (`config.staging.json`, `config.production.json`) is git-ignored. Do not commit endpoints or keys.
+
+## License
+
+The examples are MIT-licensed; see [`LICENSE`](LICENSE). `keeper/` is adapted from Chainlink's [`cre-templates`](https://github.com/smartcontractkit/cre-templates) and keeps its original MIT notice in [`keeper/LICENSE`](keeper/LICENSE).
+
+Dependencies keep their own licenses. In particular, `@chainlink/cre-sdk` is licensed under BUSL-1.1, not MIT; check its terms before production use.
